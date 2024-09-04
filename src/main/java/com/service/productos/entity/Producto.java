@@ -1,18 +1,31 @@
 package com.service.productos.entity;
 
-import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="productos")
-@Data
+@Document(collection = "productos")
 public class Producto {
-    @Id
-    private String id; // MongoDB utiliza ObjectId, por lo que el ID es de tipo String
-    private String nombre;
-    private String descripcion;
-    private Double precio;
 
+    @Id
+    private String id;
+    private String nombre;
+    private double precio;
+    private String descripcion;
+
+    public Producto(String nombre, double precio, String descripcion) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.descripcion = descripcion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    // Getters y Setters
 
     public String getId() {
         return id;
@@ -36,13 +49,5 @@ public class Producto {
 
     public void setPrecio(double precio) {
         this.precio = precio;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 }

@@ -1,6 +1,7 @@
 package com.service.productos.service;
 
 import com.service.productos.dto.ProductoDTO;
+import com.service.productos.dto.ProductoMapper;
 import com.service.productos.entity.Producto;
 import com.service.productos.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,41 +17,27 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    public List<ProductoDTO> getAllProducts() {
+    @Autowired
+    private ProductoMapper productoMapper;
+
+    public List<ProductoDTO> getAllProductos() {
         return productoRepository.findAll().stream()
-                .map(this::convertirAProductoDTO)
+                .map(productoMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<ProductoDTO> getProductById(String id) {
+    public Optional<ProductoDTO> getProductoById(String id) {
         return productoRepository.findById(id)
-                .map(this::convertirAProductoDTO);
+                .map(productoMapper::toDTO);
     }
 
-    public ProductoDTO saveProduct(ProductoDTO productoDTO) {
-        Producto producto = convertirAProducto(productoDTO);
-        Producto productoGuardado = productoRepository.save(producto);
-        return convertirAProductoDTO(productoGuardado);
+    public ProductoDTO saveProducto(ProductoDTO productoDTO) {
+        Producto producto = productoMapper.toEntity(productoDTO);
+        Producto nuevoProducto = productoRepository.save(producto);
+        return productoMapper.toDTO(nuevoProducto);
     }
 
-    public void deleteProduct(String id) {
+    public void deleteProducto(String id) {
         productoRepository.deleteById(id);
-    }
-
-    private ProductoDTO convertirAProductoDTO(Producto producto) {
-        ProductoDTO productoDTO = new ProductoDTO();
-        productoDTO.setId(producto.getId());
-        productoDTO.setNombre(producto.getNombre());
-        productoDTO.setPrecio(producto.getPrecio());
-        return productoDTO;
-    }
-
-    private Producto convertirAProducto(ProductoDTO productoDTO) {
-        Producto producto = new Producto();
-        producto.setId(productoDTO.getId());
-        producto.setNombre(productoDTO.getNombre());
-        producto.setPrecio(productoDTO.getPrecio());
-        producto.setDescripcion(productoDTO.getDescripcion());
-        return producto;
     }
 }
