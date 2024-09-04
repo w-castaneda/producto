@@ -1,19 +1,13 @@
-package com.service.productos.entity;
+package com.service.productos.dto;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+public class ProductoDTO {
 
-@Document(collection="productos")
-@Data
-public class Producto {
-    @Id
-    private String id; // MongoDB utiliza ObjectId, por lo que el ID es de tipo String
+    private String id;
     private String nombre;
     private String descripcion;
-    private Double precio;
+    private double precio;
 
-
+    // Getters y Setters
     public String getId() {
         return id;
     }
