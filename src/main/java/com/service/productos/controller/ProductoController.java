@@ -1,5 +1,6 @@
 package com.service.productos.controller;
 
+import com.service.productos.dto.ProductoDTO;
 import com.service.productos.entity.Producto;
 import com.service.productos.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,28 +18,31 @@ public class ProductoController {
     private ProductoService productoService;
 
     @GetMapping
-    public ResponseEntity<List<Producto>> getAllProducts() {
+    public ResponseEntity<List<ProductoDTO>> getAllProducts() {
         return ResponseEntity.ok(productoService.getAllProducts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> getProductById(@PathVariable String id) {
-        Optional<Producto> producto = productoService.getProductById(id);
-        return producto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ProductoDTO> getProductById(@PathVariable String id) {
+        Optional<ProductoDTO> productoDTO = productoService.getProductById(id);
+        return productoDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Producto> createProduct(@RequestBody Producto producto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.saveProduct(producto));
+    public ResponseEntity<ProductoDTO> createProduct(@RequestBody ProductoDTO productoDTO) {
+        ProductoDTO productoGuardado = productoService.saveProduct(productoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoGuardado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> updateProduct(@PathVariable String id, @RequestBody Producto producto) {
+    public ResponseEntity<ProductoDTO> updateProduct(@PathVariable String id, @RequestBody ProductoDTO productoDTO) {
         if (!productoService.getProductById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        producto.setId(id);
-        return ResponseEntity.ok(productoService.saveProduct(producto));
+        productoDTO.setId(id);
+
+        ProductoDTO productoActualizado = productoService.saveProduct(productoDTO);
+        return ResponseEntity.ok(productoActualizado);
     }
 
     @DeleteMapping("/{id}")

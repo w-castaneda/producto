@@ -4,6 +4,7 @@ public class ProductoDTO {
 
     private String id;
     private String nombre;
+    private String descripcion;
     private double precio;
 
     // Getters y Setters
@@ -29,5 +30,13 @@ public class ProductoDTO {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }
