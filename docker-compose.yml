@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  producto:
+    build:
+      context: .  # Asume que Dockerfile está en el mismo directorio que docker-compose.yml
+    container_name: producto
+    ports:
+      - "8081:8081"  # Exponer el puerto 8080 del contenedor al host
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/productos  # URI de conexión a MongoDB
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"  # Exponer el puerto 27017 de MongoDB
+    volumes:
+      - mongodb-data:/data/db  # Persistencia de datos de MongoDB
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+    driver: local
